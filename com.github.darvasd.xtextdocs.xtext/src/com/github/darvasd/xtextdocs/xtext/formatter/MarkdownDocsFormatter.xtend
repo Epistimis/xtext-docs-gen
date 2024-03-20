@@ -47,18 +47,18 @@ import org.eclipse.xtext.Wildcard
 import com.github.darvasd.xtextdocs.common.formatter.DocCommentTextUtil
 
 class MarkdownDocsFormatter implements IGrammarDocsFormatter {
-	private static final String EXAMPLE_TAG = "@example"
-	private static final String VALIDATION_TAG = "@validation"
+	static final String EXAMPLE_TAG = "@example"
+	static final String VALIDATION_TAG = "@validation"
 	
-	@Accessors private boolean includeSimplifiedGrammar = true;
-	@Accessors private boolean includeDotReferenceGraph = false;
-	@Accessors private boolean gitbookLinkStyle = false;
+	@Accessors boolean includeSimplifiedGrammar = true;
+	@Accessors boolean includeDotReferenceGraph = false;
+	@Accessors boolean gitbookLinkStyle = false;
 	
 	/**
 	 * The main title text of the documentation to be generated.
 	 * If not set ({@code null}), the title will be the full name of the grammar.
 	 */
-	@Accessors private String mainTitle = null;
+	@Accessors String mainTitle = null;
 	
 	/**
 	 * Title depth offset. If set to 0, the main title will be prefixed with {@code #}, 
@@ -66,7 +66,7 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 	 * If it is greater than zero, the number of {@code #} characters will be increased
 	 * with this number at each title.
 	 */
-	private int titleLevelOffset = 0;
+	 int titleLevelOffset = 0;
 	
 	/**
 	 * Sets the title depth offset. If set to 0, the main title will be prefixed with {@code #}, 
@@ -78,7 +78,7 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 	 * as MWE2 does not support integer properties.
 	 * See https://bugs.eclipse.org/bugs/show_bug.cgi?id=377068 .
 	 */
-	public def void setTitleLevelOffset(String value) {
+	def void setTitleLevelOffset(String value) {
 		this.titleLevelOffset = Integer.parseInt(value);
 	}
 
@@ -94,7 +94,7 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 	 * If the value of {@code gitbookLinkStyle} is true, the document will 
 	 * use gitbook-style links and link anchors.
 	 */
-	public override CharSequence formatGrammar(GrammarDoc grammarDoc) {
+	override CharSequence formatGrammar(GrammarDoc grammarDoc) {
 		Preconditions.checkNotNull(grammarDoc, "grammarDoc");
 		
 		val Map<AbstractRule, RuleDoc> mapping = grammarDoc.rules.toMap([it|it.rule], [it|it]);
@@ -147,10 +147,10 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 	 * If the value of {@code gitbookLinkStyle} is true, the document will 
 	 * use gitbook-style links and link anchors.
 	 */
-	public dispatch def CharSequence formatRule(RuleDoc ruleDoc, Map<AbstractRule, RuleDoc> mapping) {
+	dispatch def CharSequence formatRule(RuleDoc ruleDoc, Map<AbstractRule, RuleDoc> mapping) {
 	}
 
-	public dispatch def CharSequence formatRule(ParserRuleDoc ruleDoc, Map<AbstractRule, RuleDoc> mapping) '''
+	dispatch def CharSequence formatRule(ParserRuleDoc ruleDoc, Map<AbstractRule, RuleDoc> mapping) '''
 		«ruleDocHeader(ruleDoc.ruleName, "")»
 		«ruleDoc.headComment.getMainDescription.docCommentFormattingToMd»
 		
@@ -165,7 +165,7 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 	'''
 
 
-	public dispatch def CharSequence formatRule(EnumRuleDoc ruleDoc, Map<AbstractRule, RuleDoc> mapping) '''
+	dispatch def CharSequence formatRule(EnumRuleDoc ruleDoc, Map<AbstractRule, RuleDoc> mapping) '''
 		«ruleDocHeader(ruleDoc.ruleName, "enum")»
 		«ruleDoc.headComment.getMainDescription.docCommentFormattingToMd»
 		
@@ -190,7 +190,7 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 		return ret;
 	}
 
-	public dispatch def CharSequence formatRule(TerminalRuleDoc ruleDoc, Map<AbstractRule, RuleDoc> mapping) '''
+	dispatch def CharSequence formatRule(TerminalRuleDoc ruleDoc, Map<AbstractRule, RuleDoc> mapping) '''
 		«ruleDocHeader(ruleDoc.ruleName, '''terminal«IF ruleDoc.isTerminalFragment» fragment«ENDIF»''')»
 		«ruleDoc.headComment.getMainDescription.docCommentFormattingToMd»
 		

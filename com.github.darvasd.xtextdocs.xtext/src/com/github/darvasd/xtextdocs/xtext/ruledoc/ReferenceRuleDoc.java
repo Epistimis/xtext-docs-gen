@@ -22,7 +22,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.AbstractRule;
 import org.eclipse.xtext.RuleCall;
 
-import com.github.darvasd.xtextdocs.xtext.ruledoc.RuleDoc;
 import com.github.darvasd.xtextdocs.xtext.doccomment.DocComment;
 
 /**

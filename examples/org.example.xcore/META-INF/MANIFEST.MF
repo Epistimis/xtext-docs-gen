@@ -1,12 +1,13 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Example for Xcore documentation generation
+Bundle-Name: %pluginName
 Bundle-SymbolicName: org.example.xcore;singleton:=true
+Automatic-Module-Name: org.example.xcore
 Bundle-Version: 1.1.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.example.xcore.library,
  org.example.xcore.library.impl,
  org.example.xcore.library.util

@@ -23,7 +23,7 @@ import org.junit.Test
 import com.github.darvasd.xtextdocs.xtext.formatter.MarkdownDocsFormatter
 
 class IntegrationTest {
-	private Grammar grammar;
+	Grammar grammar;
 
 	/**
 	 * Loads the grammar metamodel for the integration tests.

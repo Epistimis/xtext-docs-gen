@@ -25,7 +25,7 @@ import org.eclipse.xtext.xtext.generator.model.FileAccessFactory
  * Contains ideas from https://www.eclipse.org/forums/index.php/t/1067192/ .
  */
 class DocsGeneratorFragment extends AbstractXtextGeneratorFragment {
-	private final static Logger LOG = Logger.getLogger(DocsGeneratorFragment);
+	final static Logger LOG = Logger.getLogger(DocsGeneratorFragment);
 
 	Grammar grammar;
 

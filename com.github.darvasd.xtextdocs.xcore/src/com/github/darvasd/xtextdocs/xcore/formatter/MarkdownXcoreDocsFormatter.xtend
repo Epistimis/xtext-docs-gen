@@ -34,15 +34,15 @@ import com.github.darvasd.xtextdocs.common.formatter.DocCommentTextUtil
  */
 class MarkdownXcoreDocsFormatter implements IXcoreDocsFormatter {
 
-	private static val DOCUMENTATION_ANNOTATION_KEY = "documentation";
+	static val DOCUMENTATION_ANNOTATION_KEY = "documentation";
 
-	private static val extension MarkdownTextFormatter mdFormatter = MarkdownTextFormatter.INSTANCE;
+	static val extension MarkdownTextFormatter mdFormatter = MarkdownTextFormatter.INSTANCE;
 
 	/**
 	 * The main title text of the documentation to be generated.
 	 * If not set ({@code null}), the title will be the URI of the metamodel.
 	 */
-	@Accessors private String mainTitle = null;
+	@Accessors String mainTitle = null;
 
 	@Accessors boolean gitbookLinkStyle = true;
 
@@ -56,7 +56,7 @@ class MarkdownXcoreDocsFormatter implements IXcoreDocsFormatter {
 	 * If it is greater than zero, the number of {@code #} characters will be increased
 	 * with this number at each title.
 	 */
-	private int titleLevelOffset = 0;
+	int titleLevelOffset = 0;
 
 	/**
 	 * Sets the title depth offset. If set to 0, the main title will be prefixed with {@code #}, 
@@ -68,15 +68,15 @@ class MarkdownXcoreDocsFormatter implements IXcoreDocsFormatter {
 	 * as MWE2 does not support integer properties.
 	 * See https://bugs.eclipse.org/bugs/show_bug.cgi?id=377068 .
 	 */
-	public def void setTitleLevelOffset(String value) {
+	def void setTitleLevelOffset(String value) {
 		this.titleLevelOffset = Integer.parseInt(value);
 	}
 
 	/**
 	 * Map that stores (name, id) pairs. The stored 'id' is the anchor that is used for the definition of the class 'name'.
 	 */
-	private SortedMap<String, String> anchors = new TreeMap<String, String>();
-	private int anchorCounter = 1;
+	SortedMap<String, String> anchors = new TreeMap<String, String>();
+	int anchorCounter = 1;
 
 	override generateDocs(XcoreResource resource) {
 		fillAnchors(resource);

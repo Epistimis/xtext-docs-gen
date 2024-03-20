@@ -16,7 +16,7 @@ import org.apache.log4j.Logger
  * Xcore documentation generation fragment to be used in MWE2 workflows.
  */
 class DocsGeneratorFragment implements IWorkflowComponent {
-	private final static Logger LOG = Logger.getLogger(DocsGeneratorFragment);
+	final static Logger LOG = Logger.getLogger(DocsGeneratorFragment);
 	
 	/**
 	 * The URI of the Xcore metamodel to be documented.

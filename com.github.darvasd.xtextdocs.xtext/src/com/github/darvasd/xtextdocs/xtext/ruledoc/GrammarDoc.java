@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.eclipse.xtext.Grammar;
 
-import com.github.darvasd.xtextdocs.xtext.ruledoc.RuleDoc;
 import com.github.darvasd.xtextdocs.xtext.doccomment.DocComment;
 import com.google.common.base.Preconditions;
 

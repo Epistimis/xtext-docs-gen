@@ -31,7 +31,7 @@ Domainmodel:
 
 ####  AbstractElement  
 An **element** is a _package declaration_,
-_import_ or _type_.
+ _import_ or _type_.
 			
 
 This is the root element of the grammar.
@@ -55,7 +55,7 @@ AbstractElement:
 
 
 ####  PackageDeclaration  
-A **package** has a _qualified name_ and
+A **package** has a  _qualified name_  and
 [elements](#abstractelement) inside.
 
 - **Validation:**
@@ -231,11 +231,11 @@ A dummy enum to demonstrate its documentation.
 
 Literals:
 - One (`ONE`)
-	 : _Representation of **number 1**._
+	 :  _Representation of **number 1**._ 
 - Three (`THREE`)
-	 : _Representation of **number 3**._
+	 :  _Representation of **number 3**._ 
 - Two (`TWO`, `ZWEI`)
-	 : _Representation of **number 2**._
+	 :  _Representation of **number 2**._ 
 
 ```
 enum DummyEnum:
@@ -284,12 +284,12 @@ digraph G {
 	Domainmodel [ color="red", fillcolor="#e6e6ff" ];
 	Domainmodel -> AbstractElement;
 	AbstractElement [ color="black", fillcolor="#e6e6ff" ];
-	AbstractElement -> PackageDeclaration;
 	AbstractElement -> Type;
+	AbstractElement -> PackageDeclaration;
 	AbstractElement -> Import;
 	PackageDeclaration [ color="black", fillcolor="#e6e6ff" ];
-	PackageDeclaration -> AbstractElement;
 	PackageDeclaration -> QualifiedName;
+	PackageDeclaration -> AbstractElement;
 	Import [ color="black", fillcolor="#e6e6ff" ];
 	Import -> QualifiedNameWithWildcard;
 	QualifiedName [ color="black", fillcolor="#e6e6ff" ];
@@ -306,8 +306,8 @@ digraph G {
 	Entity [ color="black", fillcolor="#e6e6ff" ];
 	ID [ color="black", fillcolor="#e6e6ff", style="dashed" ];
 	Entity -> ID [ style="dashed" ];
-	Entity -> Feature;
 	Entity -> QualifiedName;
+	Entity -> Feature;
 	Feature [ color="black", fillcolor="#e6e6ff" ];
 	ID [ color="black", fillcolor="#e6e6ff", style="dashed" ];
 	Feature -> ID [ style="dashed" ];

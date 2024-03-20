@@ -22,7 +22,6 @@ import org.eclipse.xtext.EnumLiteralDeclaration;
 import org.eclipse.xtext.EnumRule;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 
-import com.github.darvasd.xtextdocs.xtext.ruledoc.RuleDoc;
 import com.github.darvasd.xtextdocs.xtext.DocsGenerator;
 import com.github.darvasd.xtextdocs.xtext.doccomment.DocComment;
 import com.google.common.base.Preconditions;

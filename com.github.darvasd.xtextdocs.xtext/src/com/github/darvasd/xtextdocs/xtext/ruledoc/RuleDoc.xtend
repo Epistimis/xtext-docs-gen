@@ -21,26 +21,26 @@ import org.eclipse.xtext.EnumRule
 /**
  * Generic representation of documentation attached to an {@link AbstractRule} Xtext rule.
  */
-public abstract class RuleDoc {
-	private DocComment headComment;
+abstract class RuleDoc {
+	DocComment headComment;
 
 	/**
 	 * Creates a new Xtext rule representation with the given head comment.
 	 * @param headComment Parsed head comment. Shall not be {@null}.
 	 */
-	public new(DocComment headComment) {
+	new(DocComment headComment) {
 		this.headComment = Preconditions.checkNotNull(headComment);
 	}
 
 	/**
 	 * Returns the Xtext rule that is represented by this.
 	 */
-	public abstract def AbstractRule getRule();
+	abstract def AbstractRule getRule();
 
 	/**
 	 * Returns the name of the represented grammar rule.
 	 */
-	public def String getRuleName() {
+	def String getRuleName() {
 		return getRule().getName();
 	}
 
@@ -48,7 +48,7 @@ public abstract class RuleDoc {
 	 * Returns the head comment attached to the represented grammar rule.
 	 * @return Head comment. Never {@code null}.
 	 */
-	public def DocComment getHeadComment() {
+	def DocComment getHeadComment() {
 		return headComment;
 	}
 
@@ -56,7 +56,7 @@ public abstract class RuleDoc {
 	 * Creates an appropriate {@link RuleDoc} representation for the given 
 	 * rule, with the given head comment.
 	 */
-	public def static RuleDoc create(AbstractRule rule, DocComment headComment) {
+	def static RuleDoc create(AbstractRule rule, DocComment headComment) {
 		switch (rule) {
 			ParserRule: return new ParserRuleDoc(rule, headComment)
 			EnumRule: return new EnumRuleDoc(rule, headComment)
