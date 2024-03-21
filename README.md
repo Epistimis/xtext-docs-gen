@@ -10,7 +10,7 @@ To get the gist of it, have a look at the example below, illustrating the docume
 To check a more comprehensive example, see the [documentation](docs/ExampleDomainmodelDocs.md) generated for the [Domainmodel example grammar](examples/org.example.domainmodel/src/org/example/domainmodel/Domainmodel.xtext), using [this workflow file](examples/org.example.domainmodel/src/org/example/domainmodel/GenerateDomainmodel.mwe2).
 
 ### Usage
-1. Add `com.github.darvasd.xtextdocs.xtext` as depencency to the `MANIFEST.MF` of your plug-in project containing the Xtext grammar.
+1. Add `com.epistimis.xtextdocs.xtext` as depencency to the `MANIFEST.MF` of your plug-in project containing the Xtext grammar.
    * You can use the http://darvasd.github.io/xtext-docs-gen/release/ update site to fetch it.
 1. Add the documentation generation to your workflow description (`.mwe2` file next to your grammar), as a fragment for your language configuration (`XtextGeneratorLanguage` instance). For example:
    ```
@@ -30,8 +30,8 @@ To check a more comprehensive example, see the [documentation](docs/ExampleDomai
    
    You will need some imports:
    ```
-   import com.github.darvasd.xtextdocs.xtext.fragment.DocsGeneratorFragment
-   import com.github.darvasd.xtextdocs.xtext.formatter.MarkdownDocsFormatter
+   import com.epistimis.xtextdocs.xtext.fragment.DocsGeneratorFragment
+   import com.epistimis.xtextdocs.xtext.formatter.MarkdownDocsFormatter
    ```
 1. If you execute your workflow, the grammar documentation should be generated. You can see it in the log as well:
    ```
@@ -50,7 +50,7 @@ To get the gist of it, have a look at the example below, illustrating the docume
 To check a more comprehensive example, see the [documentation](docs/ExampleXcoreDocs.md) generated for the [Library example metamodel](examples/org.example.xcore/model/Library.xcore), using [this workflow file](examples/org.example.xcore/src/org/example/xcore/library/GenerateXcoreDocs.mwe2).
 
 ### Usage
-1. Add `com.github.darvasd.xtextdocs.xcore` as depencency to the `MANIFEST.MF` of your plug-in project containing the Xcore metamodel(s).
+1. Add `com.epistimis.xtextdocs.xcore` as depencency to the `MANIFEST.MF` of your plug-in project containing the Xcore metamodel(s).
    * You can use the http://darvasd.github.io/xtext-docs-gen/release/ update site to fetch it.
 1. You may need in addition the following dependencies (you can make them optional if they are only required for the documentation generation): `org.eclipse.core.runtime`, `org.eclipse.emf.ecore`, `org.eclipse.emf.ecore.xcore.lib`, `org.eclipse.emf.mwe2.launch`, `org.eclipse.emf.mwe2.lib`,  `org.eclipse.emf.ecore.xcore`, `org.eclipse.emf.codegen.ecore`, `org.apache.commons.logging`.
 1. Create an MWE2 workflow description (`.mwe2` file) that will generate the Xcore documentation. Take [this](https://github.com/darvasd/xtext-docs-gen/tree/master/examples/org.example.xcore/src/org/example/xcore/library/GenerateXcoreDocs.mwe2) as an example for the Xcore metamodel loading. For the documentation generation configuration, here is an example:
@@ -74,8 +74,8 @@ To check a more comprehensive example, see the [documentation](docs/ExampleXcore
    
    You will need some imports:
    ```
-   import com.github.darvasd.xtextdocs.xcore.fragment.DocsGeneratorFragment
-   import com.github.darvasd.xtextdocs.xcore.formatter.MarkdownXcoreDocsFormatter
+   import com.epistimis.xtextdocs.xcore.fragment.DocsGeneratorFragment
+   import com.epistimis.xtextdocs.xcore.formatter.MarkdownXcoreDocsFormatter
    ```
 1. If you execute your workflow, the grammar documentation should be generated. You can see it in the log as well:
    ```

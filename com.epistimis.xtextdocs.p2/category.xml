@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <bundle id="com.epistimis.xtextdocs.common" version="1.1.0.qualifier"/>
+   <bundle id="com.epistimis.xtextdocs.xtext" version="1.1.0.qualifier">
+      <category name="com.epistimis.xtextdocs.xtext"/>
+   </bundle>
+   <bundle id="com.epistimis.xtextdocs.xcore" version="1.1.0.qualifier">
+      <category name="com.epistimis.xtextdocs.xcore"/>
+   </bundle>
+   <category-def name="com.epistimis.xtextdocs.xtext" label="Xtext documentation generator">
+      <description>
+         Visit http://github.com/darvasd/xtext-docs-gen for more details.
+      </description>
+   </category-def>
+   <category-def name="com.epistimis.xtextdocs.xcore" label="Xcore documentation generator">
+      <description>
+         Visit http://github.com/darvasd/xtext-docs-gen for more details.
+      </description>
+   </category-def>
+   <repository-reference location="http://download.eclipse.org/releases/oxygen/" enabled="true" />
+</site>

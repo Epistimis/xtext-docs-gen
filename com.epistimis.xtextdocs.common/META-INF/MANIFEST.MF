@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.epistimis.xtextdocs.common
+Bundle-Name: Commons for documentation generation
+Bundle-SymbolicName: com.epistimis.xtextdocs.common
+Bundle-Version: 1.1.0.qualifier
+Bundle-Vendor: Daniel Darvas
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Require-Bundle: com.google.guava,
+ org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro,
+ org.eclipse.xtext
+Export-Package: com.epistimis.xtextdocs.common.formatter,
+ com.epistimis.xtextdocs.common.xtext
+

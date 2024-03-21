@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Automatic-Module-Name: com.epistimis.xtextdocs.common.test
+Bundle-Name: Test
+Bundle-SymbolicName: com.epistimis.xtextdocs.common.test
+Bundle-Version: 1.1.0.qualifier
+Bundle-Vendor: Daniel Darvas
+Fragment-Host: com.epistimis.xtextdocs.common
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Import-Package: org.junit;version="4.12.0"
