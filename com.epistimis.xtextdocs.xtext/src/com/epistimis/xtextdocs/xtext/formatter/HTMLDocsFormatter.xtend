@@ -53,46 +53,6 @@ class HTMLDocsFormatter extends DotGraphBaseFormatter {
 		return ".html";
 	}
 
-//	static final String EXAMPLE_TAG = "@example"
-//	static final String VALIDATION_TAG = "@validation"
-//	
-//	@Accessors boolean includeSimplifiedGrammar = true;
-//	@Accessors boolean includeDotReferenceGraph = false;
-//	@Accessors boolean gitbookLinkStyle = false;
-//	
-//	/**
-//	 * The main title text of the documentation to be generated.
-//	 * If not set ({@code null}), the title will be the full name of the grammar.
-//	 */
-//	@Accessors String mainTitle = null;
-//	
-//	/**
-//	 * Title depth offset. If set to 0, the main title will be prefixed with {@code #}, 
-//	 * the second level titles with {@code ##}, etc.
-//	 * If it is greater than zero, the number of {@code #} characters will be increased
-//	 * with this number at each title.
-//	 */
-//	 int titleLevelOffset = 0;
-//	
-//	/**
-//	 * Sets the title depth offset. If set to 0, the main title will be prefixed with {@code #}, 
-//	 * the second level titles with {@code ##}, etc.
-//	 * If it is greater than zero, the number of {@code #} characters will be increased
-//	 * with this number at each title.
-//	 * <p>
-//	 * It is an ugly workaround to take a string as argument, but this is necessary
-//	 * as MWE2 does not support integer properties.
-//	 * See https://bugs.eclipse.org/bugs/show_bug.cgi?id=377068 .
-//	 */
-//	def void setTitleLevelOffset(String value) {
-//		this.titleLevelOffset = Integer.parseInt(value);
-//	}
-
-//	/**
-//	 * Map that stores (name, id) pairs. The stored 'id' is the anchor that is used for the definition of the class 'name'.
-//	 */
-//	SortedMap<String, String> anchors = new TreeMap<String, String>();
-//	int anchorCounter = 1;
 	/**
 	 * Generates a table of contents representation based on the stored anchors.
 	 * For now, we only create a ToC of the Parser Rules - they are the key ones. 
@@ -110,18 +70,6 @@ class HTMLDocsFormatter extends DotGraphBaseFormatter {
 			</div>
 		''';
 	}
-
-//	/**
-//	 * Generates unique anchors for the classifiers in the given resource.
-//	 */
-//	private def fillAnchors(XtextResource resource) {
-//		for (EObject e : resource.allContents.toIterable) {
-//			if (e instanceof XClassifier) {
-//				anchors.put(e.name, "#anchor" + anchorCounter);
-//				anchorCounter++;
-//			}
-//		}
-//	}
 
 	/**
 	 * Returns a Markdown-formatted document describing the given grammar,
@@ -285,29 +233,10 @@ class HTMLDocsFormatter extends DotGraphBaseFormatter {
 	'''
 
 	// Private helpers
-		
-//	/**
-//	 * Returns all rules which are used from the given root rule (transitively),
-//	 * even if they are not in the current grammar.
-//	 */
-//	private def List<AbstractRule> allUsedRules(AbstractRule rootRule) {
-//		val List<AbstractRule> ret = newArrayList();
-//		val Queue<AbstractRule> toBeChecked = new LinkedList<AbstractRule>();
-//		toBeChecked.add(rootRule);
-//		
-//		while (!toBeChecked.isEmpty()) {
-//			val current = toBeChecked.remove();
-//			if (!ret.contains(current)) {
-//				ret.add(current);
-//				current.eAllContents.toIterable.filter(RuleCall).map[it | it.rule].forEach[it | toBeChecked.add(it)];
-//			}
-//		}
-//		
-//		return ret;
-//	}
+	
 	
 	/**
-	 * Since Markdown generates links based on the header content, we must know what that text is.
+	 * To generate links based on the header content, we must know what that text is.
 	 */
 	private def ruleDocHeaderText(String ruleName, String ruleType) {
 		return '''«ruleName»«IF !ruleType.nullOrEmpty» («ruleType»)«ENDIF»'''
@@ -396,14 +325,6 @@ class HTMLDocsFormatter extends DotGraphBaseFormatter {
 		```
 	'''
 	
-		
-//	/**
-//	 * Returns a BNF-like simplified representation of the given rule 
-//	 * definition, with Markdown formatting.
-//	 */
-//	private def CharSequence formattedRuleDef(AbstractElement element) {
-//		return formattedRuleDef(element, false);
-//	}
 
 	/**
 	 * Returns a BNF-like simplified representation of the given rule 
@@ -498,9 +419,4 @@ class HTMLDocsFormatter extends DotGraphBaseFormatter {
 			}
 		}
 	}
-	
-	
-//	private def String headerPrefix(int level) {
-//		return '''«Strings.repeat("#", level + titleLevelOffset)» ''';
-//	}
 }
