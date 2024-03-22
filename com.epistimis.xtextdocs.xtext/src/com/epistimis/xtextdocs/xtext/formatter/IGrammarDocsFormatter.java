@@ -35,6 +35,16 @@ public interface IGrammarDocsFormatter {
 	CharSequence formatGrammar(GrammarDoc grammarDoc);
 
 	/**
+	 * Returns a DOT graph textual representation of the given grammar
+	 * documentation node, including the rules contained within.
+	 * 
+	 * @param grammarDoc
+	 *            Grammar documentation.
+	 * @return DOT graph textual representation of the grammar.
+	 */
+	CharSequence formatGraph(GrammarDoc grammarDoc);
+
+	/**
 	 * Returns a formatted, textual representation of the given single rule
 	 * documentation node.
 	 * 
@@ -47,4 +57,10 @@ public interface IGrammarDocsFormatter {
 	 * @return Formatted, textual representation of the rule.
 	 */
 	CharSequence formatRule(RuleDoc ruleDoc, Map<AbstractRule, RuleDoc> mapping);
+	
+	/**
+	 * Returns the file extension for the output files created by this formatter.
+	 * @return The file extension
+	 */
+	String outputFileExtension();
 }

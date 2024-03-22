@@ -52,6 +52,20 @@ public final class DocsGenerator {
 	}
 
 	/**
+	 * Generates a DOT graph textual documentation for the given grammar, using the
+	 * given formatter.
+	 * 
+	 * @param grammar
+	 *            The grammar to be represented.
+	 * @param formatter
+	 *            The formatter to be used.
+	 * @return DOT graph textual documentation.
+	 */
+	public static CharSequence generateDOTGraph(Grammar grammar, IGrammarDocsFormatter formatter) {
+		GrammarDoc grammarDoc = createGrammarDocumentation(grammar);
+		return formatter.formatGraph(grammarDoc);
+	}
+	/**
 	 * Creates and returns a documentation object for the grammar, including its
 	 * rules.
 	 * 

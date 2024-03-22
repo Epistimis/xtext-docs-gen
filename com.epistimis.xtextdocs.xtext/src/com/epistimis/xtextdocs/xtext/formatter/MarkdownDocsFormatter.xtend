@@ -11,6 +11,7 @@
 
 package com.epistimis.xtextdocs.xtext.formatter
 
+import com.epistimis.xtextdocs.common.formatter.DocCommentTextUtil
 import com.epistimis.xtextdocs.common.formatter.MarkdownTextFormatter
 import com.epistimis.xtextdocs.common.xtext.XtextTokenUtil
 import com.epistimis.xtextdocs.xtext.doccomment.DocComment
@@ -23,12 +24,9 @@ import com.epistimis.xtextdocs.xtext.ruledoc.RuleDoc
 import com.epistimis.xtextdocs.xtext.ruledoc.TerminalRuleDoc
 import com.google.common.base.Preconditions
 import com.google.common.base.Strings
-import java.util.LinkedList
 import java.util.List
 import java.util.Map
-import java.util.Queue
 import org.eclipse.emf.ecore.EEnumLiteral
-import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtext.AbstractElement
 import org.eclipse.xtext.AbstractRule
 import org.eclipse.xtext.Action
@@ -45,43 +43,79 @@ import org.eclipse.xtext.RuleCall
 import org.eclipse.xtext.UnorderedGroup
 import org.eclipse.xtext.UntilToken
 import org.eclipse.xtext.Wildcard
-import com.epistimis.xtextdocs.common.formatter.DocCommentTextUtil
 
-class MarkdownDocsFormatter implements IGrammarDocsFormatter {
-	static final String EXAMPLE_TAG = "@example"
-	static final String VALIDATION_TAG = "@validation"
-	
-	@Accessors boolean includeSimplifiedGrammar = true;
-	@Accessors boolean includeDotReferenceGraph = false;
-	@Accessors boolean gitbookLinkStyle = false;
-	
-	/**
-	 * The main title text of the documentation to be generated.
-	 * If not set ({@code null}), the title will be the full name of the grammar.
-	 */
-	@Accessors String mainTitle = null;
-	
-	/**
-	 * Title depth offset. If set to 0, the main title will be prefixed with {@code #}, 
-	 * the second level titles with {@code ##}, etc.
-	 * If it is greater than zero, the number of {@code #} characters will be increased
-	 * with this number at each title.
-	 */
-	 int titleLevelOffset = 0;
-	
-	/**
-	 * Sets the title depth offset. If set to 0, the main title will be prefixed with {@code #}, 
-	 * the second level titles with {@code ##}, etc.
-	 * If it is greater than zero, the number of {@code #} characters will be increased
-	 * with this number at each title.
-	 * <p>
-	 * It is an ugly workaround to take a string as argument, but this is necessary
-	 * as MWE2 does not support integer properties.
-	 * See https://bugs.eclipse.org/bugs/show_bug.cgi?id=377068 .
-	 */
-	def void setTitleLevelOffset(String value) {
-		this.titleLevelOffset = Integer.parseInt(value);
+class MarkdownDocsFormatter extends DotGraphBaseFormatter {
+
+	static val extension MarkdownTextFormatter textFormatter = MarkdownTextFormatter.INSTANCE;
+
+	override outputFileExtension() {
+		return ".md";
 	}
+//	static final String EXAMPLE_TAG = "@example"
+//	static final String VALIDATION_TAG = "@validation"
+//	
+//	@Accessors boolean includeSimplifiedGrammar = true;
+//	@Accessors boolean includeDotReferenceGraph = false;
+//	@Accessors boolean gitbookLinkStyle = false;
+//	
+//	/**
+//	 * The main title text of the documentation to be generated.
+//	 * If not set ({@code null}), the title will be the full name of the grammar.
+//	 */
+//	@Accessors String mainTitle = null;
+//	
+//	/**
+//	 * Title depth offset. If set to 0, the main title will be prefixed with {@code #}, 
+//	 * the second level titles with {@code ##}, etc.
+//	 * If it is greater than zero, the number of {@code #} characters will be increased
+//	 * with this number at each title.
+//	 */
+//	 int titleLevelOffset = 0;
+//	
+//	/**
+//	 * Sets the title depth offset. If set to 0, the main title will be prefixed with {@code #}, 
+//	 * the second level titles with {@code ##}, etc.
+//	 * If it is greater than zero, the number of {@code #} characters will be increased
+//	 * with this number at each title.
+//	 * <p>
+//	 * It is an ugly workaround to take a string as argument, but this is necessary
+//	 * as MWE2 does not support integer properties.
+//	 * See https://bugs.eclipse.org/bugs/show_bug.cgi?id=377068 .
+//	 */
+//	def void setTitleLevelOffset(String value) {
+//		this.titleLevelOffset = Integer.parseInt(value);
+//	}
+
+//	/**
+//	 * Map that stores (name, id) pairs. The stored 'id' is the anchor that is used for the definition of the class 'name'.
+//	 */
+//	SortedMap<String, String> anchors = new TreeMap<String, String>();
+//	int anchorCounter = 1;
+	/**
+	 * Generates a table of contents representation based on the stored anchors.
+	 * For now, we only create a ToC of the Parser Rules - they are the key ones. 
+	 */
+	private def toc(GrammarDoc grammarDoc) {
+		return '''
+			«headerPrefix(2)» Table of contents
+			«val tocContents = grammarDoc.rules.filter(ParserRuleDoc).toSet.sortBy[it.ruleName]»
+			«FOR ruleDoc : tocContents»
+				- «link(ruleDoc.getRuleName(), "#"+ruleDoc.getRuleName().toLowerCase())»
+			«ENDFOR»
+		''';
+	}
+
+//	/**
+//	 * Generates unique anchors for the classifiers in the given resource.
+//	 */
+//	private def fillAnchors(XtextResource resource) {
+//		for (EObject e : resource.allContents.toIterable) {
+//			if (e instanceof XClassifier) {
+//				anchors.put(e.name, "#anchor" + anchorCounter);
+//				anchorCounter++;
+//			}
+//		}
+//	}
 
 	/**
 	 * Returns a Markdown-formatted document describing the given grammar,
@@ -101,12 +135,24 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 		val Map<AbstractRule, RuleDoc> mapping = grammarDoc.rules.toMap([it|it.rule], [it|it]);
 
 		'''
+			<style>.column{width:45%;height:100%;overflow:scroll;display:inline-block}</style>
+			
 			«headerPrefix(1)» «mainTitle ?: grammarDoc.grammarName»
 			
 			«IF !grammarDoc.headComment.getMainDescription.nullOrEmpty»«grammarDoc.headComment.getMainDescription.docCommentFormattingToMd»«ENDIF»
+
+			<div class="column">
+			
+			«IF includeToc»
+				«toc(grammarDoc)»
+			«ENDIF»
+			
+			</div>
+			
+			<div class="column">
 			
 			«IF !grammarDoc.grammar.usedGrammars.isEmpty»
-				Included grammars:
+				«headerPrefix(2)»Included grammars:
 				«FOR x : grammarDoc.grammar.usedGrammars»
 					- `«x.name»`
 				«ENDFOR»
@@ -114,7 +160,7 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 			
 			«val metamodels = grammarDoc.grammar.metamodelDeclarations.filter[!alias.nullOrEmpty]»
 			«IF !metamodels.isEmpty»
-				Included metamodels:
+				«headerPrefix(2)»Included metamodels:
 				«FOR x : metamodels»
 					- «x.alias» (`«x.EPackage.nsURI»`)
 				«ENDFOR»
@@ -122,10 +168,7 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 			
 			«headerPrefix(2)» Rules
 			«FOR ruleDoc : grammarDoc.rules»
-				«formatRule(ruleDoc, mapping)»
-				
-				
-				
+				«formatRule(ruleDoc, mapping)»			
 			«ENDFOR»
 			
 			«IF includeSimplifiedGrammar»
@@ -137,8 +180,10 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 			«ENDIF»
 			
 			«IF includeDotReferenceGraph»
-				«dotRefGraph(grammarDoc.rules, grammarDoc.rules.get(0), mapping)»
+				«dotGraphRef(grammarDoc.rules, grammarDoc.rules.get(0), mapping)»
 			«ENDIF»
+			
+			</div>
 		'''
 	}
 	
@@ -150,7 +195,12 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 	 */
 	dispatch def CharSequence formatRule(RuleDoc ruleDoc, Map<AbstractRule, RuleDoc> mapping) {
 	}
+	def dispatch CharSequence genRuleHeader(RuleDoc ruleDoc) {
+	}
 
+	def dispatch CharSequence genRuleHeader(ParserRuleDoc ruleDoc) {
+		return 	ruleDocHeaderText(ruleDoc.ruleName, "");	
+	}
 	dispatch def CharSequence formatRule(ParserRuleDoc ruleDoc, Map<AbstractRule, RuleDoc> mapping) '''
 		«ruleDocHeader(ruleDoc.ruleName, "")»
 		«ruleDoc.headComment.getMainDescription.docCommentFormattingToMd»
@@ -166,6 +216,9 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 	'''
 
 
+	def dispatch CharSequence genRuleHeader(EnumRuleDoc ruleDoc) {
+		return 	ruleDocHeaderText(ruleDoc.ruleName, "enum");	
+	}
 	dispatch def CharSequence formatRule(EnumRuleDoc ruleDoc, Map<AbstractRule, RuleDoc> mapping) '''
 		«ruleDocHeader(ruleDoc.ruleName, "enum")»
 		«ruleDoc.headComment.getMainDescription.docCommentFormattingToMd»
@@ -176,7 +229,7 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 		Literals:
 		«FOR entry : getPerEnumLiteral(ruleDoc).entrySet.sortBy[it.key.name]»
 			- «entry.key.name» («FOR textLit : entry.value.map[it | it.literalText] SEPARATOR ', '»`«textLit»`«ENDFOR»)
-				«val firstCommentedLiteral = entry.value.findFirst[it | it.comment.isPresent && !it.comment.get.mainDescription.isNullOrEmpty]»«IF firstCommentedLiteral !== null» : «MarkdownTextFormatter.INSTANCE.italic(firstCommentedLiteral.comment.get.getMainDescription.docCommentFormattingToMd)»«ENDIF»
+				«val firstCommentedLiteral = entry.value.findFirst[it | it.comment.isPresent && !it.comment.get.mainDescription.isNullOrEmpty]»«IF firstCommentedLiteral !== null» : «textFormatter.italic(firstCommentedLiteral.comment.get.getMainDescription.docCommentFormattingToMd)»«ENDIF»
 		«ENDFOR»
 		
 		«ruleToCodeSnippet(ruleDoc.rule)»
@@ -191,6 +244,9 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 		return ret;
 	}
 
+	def dispatch CharSequence genRuleHeader(TerminalRuleDoc ruleDoc) {
+		return 	ruleDocHeaderText(ruleDoc.ruleName, '''terminal«IF ruleDoc.isTerminalFragment» fragment«ENDIF»''');	
+	}
 	dispatch def CharSequence formatRule(TerminalRuleDoc ruleDoc, Map<AbstractRule, RuleDoc> mapping) '''
 		«ruleDocHeader(ruleDoc.ruleName, '''terminal«IF ruleDoc.isTerminalFragment» fragment«ENDIF»''')»
 		«ruleDoc.headComment.getMainDescription.docCommentFormattingToMd»
@@ -205,28 +261,34 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 
 	// Private helpers
 		
-	/**
-	 * Returns all rules which are used from the given root rule (transitively),
-	 * even if they are not in the current grammar.
-	 */
-	private def List<AbstractRule> allUsedRules(AbstractRule rootRule) {
-		val List<AbstractRule> ret = newArrayList();
-		val Queue<AbstractRule> toBeChecked = new LinkedList<AbstractRule>();
-		toBeChecked.add(rootRule);
-		
-		while (!toBeChecked.isEmpty()) {
-			val current = toBeChecked.remove();
-			if (!ret.contains(current)) {
-				ret.add(current);
-				current.eAllContents.toIterable.filter(RuleCall).map[it | it.rule].forEach[it | toBeChecked.add(it)];
-			}
-		}
-		
-		return ret;
-	}
+//	/**
+//	 * Returns all rules which are used from the given root rule (transitively),
+//	 * even if they are not in the current grammar.
+//	 */
+//	private def List<AbstractRule> allUsedRules(AbstractRule rootRule) {
+//		val List<AbstractRule> ret = newArrayList();
+//		val Queue<AbstractRule> toBeChecked = new LinkedList<AbstractRule>();
+//		toBeChecked.add(rootRule);
+//		
+//		while (!toBeChecked.isEmpty()) {
+//			val current = toBeChecked.remove();
+//			if (!ret.contains(current)) {
+//				ret.add(current);
+//				current.eAllContents.toIterable.filter(RuleCall).map[it | it.rule].forEach[it | toBeChecked.add(it)];
+//			}
+//		}
+//		
+//		return ret;
+//	}
 	
+	/**
+	 * Since Markdown generates links based on the header content, we must know what that text is.
+	 */
+	private def ruleDocHeaderText(String ruleName, String ruleType) {
+		return '''«ruleName»«IF !ruleType.nullOrEmpty» («ruleType»)«ENDIF»'''
+	}
 	private def ruleDocHeader(String ruleName, String ruleType) {
-		return '''«headerPrefix(3)» «ruleName» «IF !ruleType.nullOrEmpty»(«ruleType»)«ENDIF» «IF gitbookLinkStyle»{«toLink(ruleName)»}«ENDIF»'''
+		return '''«headerPrefix(3)» «ruleDocHeaderText(ruleName,ruleType)» «IF gitbookLinkStyle»{«toLink(ruleName)»}«ENDIF»'''
 	}
 	
 	
@@ -260,7 +322,7 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 			**Refers to:**
 			«FOR ref : refersTo»
 				«IF mapping.containsKey(ref)»
-					- «mapping.get(ref).ruleName.ruleNameAsLink»
+					- «mapping.get(ref).ruleNameAsLink»
 				«ELSE»
 					- «ref.name»
 				«ENDIF»
@@ -269,9 +331,9 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 		«ENDIF»
 		«val referredBy = mapping.values.filter(ParserRuleDoc).filter[it | it.getRefersTo().contains(ruleDoc.rule)].toSet.sortBy[it.ruleName]»
 		«IF referredBy.empty == false»
-			**Referred by:**
+			**Referenced by:**
 			«FOR ref : referredBy»
-				- «ref.ruleName.ruleNameAsLink»
+				- «ref.ruleNameAsLink»
 			«ENDFOR»
 		«ENDIF»
 	'''
@@ -285,64 +347,26 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 		}
 	}
 	
-	private def ruleNameAsLink(String ruleName) {
-		return MarkdownTextFormatter.INSTANCE.link(ruleName, toLink(ruleName));
+	private def ruleNameAsLink(RuleDoc rule) {
+		
+		return textFormatter.link(rule.ruleName, toLink(genRuleHeader(rule).toString.trim));
 	}
 	
-	private def dotRefGraph(List<RuleDoc> rules, RuleDoc rootRule, Map<AbstractRule, RuleDoc> mapping) '''
+	private def dotGraphRef(List<RuleDoc> rules, RuleDoc rootRule, Map<AbstractRule, RuleDoc> mapping) '''
 		«headerPrefix(2)» Rule dependencies
 		
-		```dot
-		digraph G {
-			node[ shape="rectangle", style="filled" ];
-			
-			// Highlight root rule
-			«rootRule.ruleName» [ color="red" ];
-			
-			«FOR rule : rules»
-				«rule.ruleName» [ color="«ruleDotNodeColor(rule, rootRule)»", fillcolor="«ruleDotNodeFillColor(rule)»" ];
-				«IF rule instanceof ReferenceRuleDoc»
-					«FOR ref : rule.refersTo»
-«««					external dependencies are skipped (e.g. ID)
-						«IF mapping.containsKey(ref)»
-«««						internal dependendy
-							«rule.ruleName» -> «mapping.get(ref).ruleName»;
-						«ELSE»
-«««						external dependency
-							«ref.name» [ color="«ruleDotNodeColor(rule, rootRule)»", fillcolor="«ruleDotNodeFillColor(rule)»", style="dashed" ];
-							«rule.ruleName» -> «ref.name» [ style="dashed" ];
-						«ENDIF»
-					«ENDFOR»
-				«ENDIF»
-			«ENDFOR»
-		}
+		```[graph_ref_goes_here]Graph Reference Goes Here
 		```
 	'''
 	
-	private def ruleDotNodeColor(RuleDoc ruleDoc, RuleDoc rootRule) {
-		if (ruleDoc == rootRule) {
-			return "red";
-		} else {
-			return "black";
-		}
-	}
-	
-	private def ruleDotNodeFillColor(RuleDoc ruleDoc) {
-		switch (ruleDoc) {
-			EnumRuleDoc: return "#ffffcc"
-			ParserRuleDoc: return "#e6e6ff"
-			TerminalRuleDoc: return if (ruleDoc.isTerminalFragment) "#e6ffe6" else "#ccffcc"
-			default: return "white"
-		}
-	}
 		
-	/**
-	 * Returns a BNF-like simplified representation of the given rule 
-	 * definition, with Markdown formatting.
-	 */
-	private def CharSequence formattedRuleDef(AbstractElement element) {
-		return formattedRuleDef(element, false);
-	}
+//	/**
+//	 * Returns a BNF-like simplified representation of the given rule 
+//	 * definition, with Markdown formatting.
+//	 */
+//	private def CharSequence formattedRuleDef(AbstractElement element) {
+//		return formattedRuleDef(element, false);
+//	}
 
 	/**
 	 * Returns a BNF-like simplified representation of the given rule 
@@ -417,19 +441,23 @@ class MarkdownDocsFormatter implements IGrammarDocsFormatter {
 	}
 	
 	private def String docCommentFormattingToMd(String text) {
-		val escaped = MarkdownTextFormatter.INSTANCE.escape(text);
-		val String resolved = DocCommentTextUtil.resolveLinks(escaped, MarkdownTextFormatter.INSTANCE, [it | toLink(it)]);
-		return DocCommentTextUtil.format(resolved, MarkdownTextFormatter.INSTANCE);
+		val escaped = textFormatter.escape(text);
+		val String resolved = DocCommentTextUtil.resolveLinks(escaped, textFormatter, [it | toLink(it)]);
+		return DocCommentTextUtil.format(resolved, textFormatter);
 	}
 	
 	private def String toLink(String text) {
 		if (text.trim().matches("^https?://.*")) {
 			return text;
 		} else {
+			// First, remove all non word text - in our case, we only need to check for parens
+			// And, compress all multiple spaces to singles
+			var temp = toAnchor(text);
+			
 			if (gitbookLinkStyle) {
-				return '''#«text.replaceAll("\\s", "-")»''';
+				return "#"+temp;
 			} else {
-				return '''#«text.replaceAll("\\s", "-").toLowerCase»''';
+				return "#"+temp.toLowerCase;
 			}
 		}
 	}
