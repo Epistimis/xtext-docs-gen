@@ -11,7 +11,7 @@ To check a more comprehensive example, see the [documentation](docs/ExampleDomai
 
 ### Usage
 1. Add `com.epistimis.xtextdocs.xtext` as depencency to the `MANIFEST.MF` of your plug-in project containing the Xtext grammar.
-   * You can use the http://darvasd.github.io/xtext-docs-gen/release/ update site to fetch it.
+   * You can use the http://epistimis.github.io/xtext-docs-gen/release/ update site to fetch it.
 1. Add the documentation generation to your workflow description (`.mwe2` file next to your grammar), as a fragment for your language configuration (`XtextGeneratorLanguage` instance). For example:
    ```
 	language = StandardLanguage {
