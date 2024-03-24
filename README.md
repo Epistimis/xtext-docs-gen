@@ -1,6 +1,8 @@
 # xtext-docs-gen
 A simple overview documentation generation for Xtext grammars.
 
+This code was originally forked from https://github.com/darvasd/xtext-docs-gen. That version only works on grammars. If that's all you want, consider using it. Since significant changes are planned, I felt a fork would be appropriate.
+
 ## Xtext documentation generation
 ### Example
 To get the gist of it, have a look at the example below, illustrating the documentation generation.
