@@ -16,5 +16,5 @@ Require-Bundle: org.eclipse.xtext;bundle-version="2.10.0",
 Export-Package: com.epistimis.xtextdocs.xtext.fragment,
  com.epistimis.xtextdocs.xtext
 Import-Package: org.apache.log4j
-Bundle-Vendor: Daniel Darvas
+Bundle-Vendor: Epistimis LLC
 

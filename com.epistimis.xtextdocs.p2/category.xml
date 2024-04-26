@@ -9,13 +9,13 @@
    </bundle>
    <category-def name="com.epistimis.xtextdocs.xtext" label="Xtext documentation generator">
       <description>
-         Visit http://github.com/darvasd/xtext-docs-gen for more details.
+         Visit http://github.com/epistimis/xtext-docs-gen for more details.
       </description>
    </category-def>
    <category-def name="com.epistimis.xtextdocs.xcore" label="Xcore documentation generator">
       <description>
-         Visit http://github.com/darvasd/xtext-docs-gen for more details.
+         Visit http://github.com/epistimis/xtext-docs-gen for more details.
       </description>
    </category-def>
-   <repository-reference location="http://download.eclipse.org/releases/oxygen/" enabled="true" />
+   <repository-reference location="http://download.eclipse.org/releases/2023-12/" enabled="true" />
 </site>

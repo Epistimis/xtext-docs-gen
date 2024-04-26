@@ -3,6 +3,7 @@ Bundle-ManifestVersion: 2
 Automatic-Module-Name: com.epistimis.xtextdocs.xtext.test
 Bundle-Name: com.epistimis.xtextdocs.xtext.test
 Bundle-SymbolicName: com.epistimis.xtextdocs.xtext.test
+Bundle-Vendor: Epistimis LLC
 Bundle-Version: 1.1.0.qualifier
 Fragment-Host: com.epistimis.xtextdocs.xtext;bundle-version="1.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
