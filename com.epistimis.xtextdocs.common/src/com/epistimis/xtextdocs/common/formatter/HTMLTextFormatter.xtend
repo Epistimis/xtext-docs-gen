@@ -57,7 +57,7 @@ class HTMLTextFormatter implements ITextFormatter {
 	}
 
 	override String link(String linkText, String target) {
-		return '''<a href="#«target»" onclick="scrollToSection('«target»')">«linkText»</a>''';
+		return '''<a href="#«target»" >«linkText»</a>''';
 	}
 	
 	override unorderedList(List<String> originals) {
